@@ -21,6 +21,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     private float distanceAllowToBeCorrect = 0;
     private Vector3 originalPosition;
     private int contentValue = -1;
+    private bool firstTime = true;
     #endregion
 
     public float DistanceAllowToBeCorrect { get { return distanceAllowToBeCorrect; } set { distanceAllowToBeCorrect = value; } }
@@ -28,7 +29,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public bool CanDrag { get { return _canDrag; } set { _canDrag = value; } }
     public int ContentValue { get { return contentValue;  }  set { contentValue = value; } }
 
-    private void Start()
+    private void Awake()
     {
         canvasParent = GetComponentInParent<Canvas>();
         m_DraggingPlane = transform as RectTransform;
@@ -87,5 +88,25 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         contentValue = val;
 
         _text.text = string.Format("{00:0}", val);
+    }
+
+    public void SetAtOrigin()
+    {
+        if (firstTime)
+        {
+            firstTime = false;
+            return;
+        }
+
+        transform.position = originalPosition;
+
+        _canDrag = true;
+    }
+
+    public void SetColor(Color col)
+    {
+        _colorBackground = col;
+
+        _imgBackground.color = col;
     }
 }

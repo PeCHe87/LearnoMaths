@@ -10,6 +10,7 @@ public class GamePlayController : MonoBehaviour
 
     [SerializeField] private TargetObject[] _targets;
     [SerializeField] private DraggableObject[] _dragables;
+    [SerializeField] private Color[] _objectColors;
     [SerializeField] private float _distanceAllow;
     [SerializeField] private TextMeshProUGUI _textResult;
     [SerializeField] private float _delayToShowResult = 1;
@@ -52,6 +53,8 @@ public class GamePlayController : MonoBehaviour
 
                     obj.CanDrag = false;
 
+                    target.Answer = (obj.ContentValue == target.CorrectNumber);
+
                     CheckFinishOperation();
 
                     return;
@@ -89,10 +92,15 @@ public class GamePlayController : MonoBehaviour
 
         List<DraggableObject> dragablesToLoad = new List<DraggableObject>();
 
+        List<Color> colorsUsed = new List<Color>();
+
         //Make a copy of dragables to assign content
         for (int i = 0; i < _dragables.Length; i++)
         {
             _dragables[i].SetContentValue(-1);
+
+            _dragables[i].SetAtOrigin();
+
             dragablesToLoad.Add(_dragables[i]);
         }
 
@@ -105,6 +113,7 @@ public class GamePlayController : MonoBehaviour
 
         int[] operands = { firstOperand, secondOperand, incorrectOperand};
         int operandIndex = 0;
+        Color color;
 
         while (dragablesToLoad.Count > 0)
         {
@@ -121,6 +130,21 @@ public class GamePlayController : MonoBehaviour
                     obj.SetContentValue(operands[operandIndex]);
 
                     Debug.Log("Operand " + index + ", value: " + operands[operandIndex]);
+
+                    if (operandIndex != 2)
+                    {
+                        color = _objectColors[Random.Range(0, _objectColors.Length)];
+
+                        while (colorsUsed.Contains(color))
+                        {
+                            color = _objectColors[Random.Range(0, _objectColors.Length)];
+                        }
+
+                        colorsUsed.Add(color);
+                        obj.SetColor(color);
+                        _targets[operandIndex].Init();
+                        _targets[operandIndex].SetAnswer(color, obj.ContentValue);
+                    }
 
                     operandIndex++;
                     next = true;
@@ -158,9 +182,23 @@ public class GamePlayController : MonoBehaviour
 
     private void CheckResult(int res)
     {
+        bool finalAnswer = result == res;
+
+        if (finalAnswer)
+        {
+            for (int i = 0; i < _targets.Length; i++)
+            {
+                if (!_targets[i].Answer)
+                {
+                    finalAnswer = false;
+                    break;
+                }
+            }
+        }
+
         string sResult = "<color=";
 
-        if (result == res)
+        if (finalAnswer)
             sResult += "green";
         else
             sResult += "red";
@@ -169,7 +207,7 @@ public class GamePlayController : MonoBehaviour
 
         Debug.Log(sResult);
 
-        OnResult(result == res);
+        OnResult(finalAnswer);
 
         StartCoroutine(LoadScreenResult());
     }

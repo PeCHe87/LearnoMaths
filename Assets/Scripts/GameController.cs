@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -23,6 +24,7 @@ public class GameController : MonoBehaviour
         PlayerInformationController.OnNext += NextScreen;
         GamePlayController.OnNext += NextScreen;
         GamePlayController.OnResult += UpdateSessionResult;
+        ResultController.OnNext += NextScreen;
     }
 
     private void Start()
@@ -107,6 +109,7 @@ public class GameController : MonoBehaviour
         PlayerInformationController.OnNext -= NextScreen;
         GamePlayController.OnNext -= NextScreen;
         GamePlayController.OnResult -= UpdateSessionResult;
+        ResultController.OnNext -= NextScreen;
     }
 }
 
