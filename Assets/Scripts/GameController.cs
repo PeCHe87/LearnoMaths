@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour
         SplashController.OnNext += NextScreen;
         MainController.OnNext += NextScreen;
         PlayerInformationController.OnNext += NextScreen;
+        GamePlayController.OnNext += NextScreen;
+        GamePlayController.OnResult += UpdateSessionResult;
     }
 
     private void Start()
@@ -62,6 +64,7 @@ public class GameController : MonoBehaviour
                 _screenSplash.SetActive(false);
                 _screenMainMenu.SetActive(false);
                 _screenGameplay.SetActive(true);
+                _screenGameplay.GetComponent<GamePlayController>().InitSession();
                 _screenResult.SetActive(false);
                 _screenPlayerInfo.SetActive(false);
                 break;
@@ -92,11 +95,18 @@ public class GameController : MonoBehaviour
         ShowScreen();
     }
 
+    private void UpdateSessionResult(bool result)
+    {
+        _screenResult.GetComponent<ResultController>().SetResult(result);
+    }
+
     private void OnDestroy()
     {
         SplashController.OnNext -= NextScreen;
         MainController.OnNext -= NextScreen;
         PlayerInformationController.OnNext -= NextScreen;
+        GamePlayController.OnNext -= NextScreen;
+        GamePlayController.OnResult -= UpdateSessionResult;
     }
 }
 

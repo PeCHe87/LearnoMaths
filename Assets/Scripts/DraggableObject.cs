@@ -11,17 +11,22 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [SerializeField] private bool dragOnSurfaces = false;
     [SerializeField] private bool _canDrag = true;
     [SerializeField] private TextMeshProUGUI _text;
+    [SerializeField] private Image _imgBackground;
+    [SerializeField] private Color _colorBackground;
+    [SerializeField] private bool _canDebug = false;
 
     #region Private variables
     private RectTransform m_DraggingPlane;
     private Canvas canvasParent = null;
     private float distanceAllowToBeCorrect = 0;
     private Vector3 originalPosition;
+    private int contentValue = -1;
     #endregion
 
     public float DistanceAllowToBeCorrect { get { return distanceAllowToBeCorrect; } set { distanceAllowToBeCorrect = value; } }
     public Vector3 OriginalPosition { get { return originalPosition; } set { originalPosition = value; } }
     public bool CanDrag { get { return _canDrag; } set { _canDrag = value; } }
+    public int ContentValue { get { return contentValue;  }  set { contentValue = value; } }
 
     private void Start()
     {
@@ -40,7 +45,8 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
             m_DraggingPlane.rotation = m_DraggingPlane.rotation;
         }
 
-        Debug.Log("<color=yellow>Drag</color> pos: " + m_DraggingPlane.anchoredPosition);
+        if (_canDebug)
+            Debug.Log("<color=yellow>Drag</color> pos: " + m_DraggingPlane.anchoredPosition);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
@@ -54,18 +60,19 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         SetDraggedPosition(eventData);
 
-        Debug.Log("<color=green>BeginDrag</color>");
+        if (_canDebug)
+            Debug.Log("<color=green>BeginDrag</color>");
     }
 
     public void OnDrag(PointerEventData data)
     {
-        //if (m_DraggingIcon != null)
-            SetDraggedPosition(data);
+        SetDraggedPosition(data);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        Debug.Log("<color=red>EndDrag</color>");
+        if (_canDebug)
+            Debug.Log("<color=red>EndDrag</color>");
 
         OnFinishedDrag(this);
     }
@@ -73,5 +80,12 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public void BackOriginalPosition()
     {
         transform.position = originalPosition;
+    }
+
+    public void SetContentValue(int val)
+    {
+        contentValue = val;
+
+        _text.text = string.Format("{00:0}", val);
     }
 }
