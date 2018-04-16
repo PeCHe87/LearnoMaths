@@ -8,11 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1c6f9fa9d0fb7114694dfb90dc425d7b, type: 3}
-  m_Name: PlayerData
+  m_Script: {fileID: 11500000, guid: f554919deedbd84419857aec7ea7d2d5, type: 3}
+  m_Name: Medium
   m_EditorClassIdentifier: 
-  Name: Nina
-  CurrentDifficulty: -1
-  CurrentLevel: 0
-  CurrentExperience: 0
-  LevelsExperience: 3200000064000000fa000000
+  Name: Medium
+  ExperienceReward: 15
+  AvailableOperands: 010000000200000003000000040000000500000006000000
+  TimePerOperation: 20
+  AmountOfOptions: 4

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GamePlayController : MonoBehaviour
 {
@@ -13,17 +14,37 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private Color[] _objectColors;
     [SerializeField] private float _distanceAllow;
     [SerializeField] private TextMeshProUGUI _textResult;
+    [SerializeField] private Slider _sliderProgress;
+    [SerializeField] private float _speedTimeProgress;
     [SerializeField] private float _delayToShowResult = 1;
 
-    int result;
-    int firstOperand;
-    int secondOperand;
-    int incorrectOperand;
+    int result = 0;
+    int firstOperand = 0;
+    int secondOperand = 0;
+    int incorrectOperand = 0;
+    ScriptableDifficulty currentDifficulty = null;
+    private bool isPlaying = false;
+    private float currentTimeProgress = 0;
 
     #region Private methods
     private void Awake()
     {
         DraggableObject.OnFinishedDrag += DraggableObjectFinishedDrag;
+    }
+
+    private void Update()
+    {
+        if (!isPlaying)
+            return;
+
+        currentTimeProgress -= Time.deltaTime * _speedTimeProgress;
+
+        float progress = currentTimeProgress / currentDifficulty.TimePerOperation;
+
+        _sliderProgress.value = progress;
+
+        if (currentTimeProgress <= 0)
+            EndOperationByTimeout();
     }
 
     ///Check if it near to the allow distance to one of the posible targets availables
@@ -53,8 +74,13 @@ public class GamePlayController : MonoBehaviour
 
                     obj.CanDrag = false;
 
-                    target.Answer = (obj.ContentValue == target.CorrectNumber);
+                    target.Answer = (obj.ContentValue == target.CorrectNumber && obj.ColorBackground == target.ColorBackground);
 
+                    Debug.Log("Finish drag -> correct value: " + target.Answer);
+
+                    //TODO: show a feedback sound/vfx of answer
+
+                    //Control if operation has finished
                     CheckFinishOperation();
 
                     return;
@@ -72,11 +98,14 @@ public class GamePlayController : MonoBehaviour
 
     private void GenerateOperation()
     {
+        int minOperand = currentDifficulty.AvailableOperands[0];
+        int maxOperand = currentDifficulty.AvailableOperands[currentDifficulty.AvailableOperands.Length-1];
+        
         //Get first operand
-        firstOperand = Random.Range(0, 10);
+        firstOperand = Random.Range(minOperand, maxOperand+1);
 
         //Get second operand
-        secondOperand = Random.Range(0, 10);
+        secondOperand = Random.Range(minOperand, maxOperand+1);
 
         //Get result of the operation based on two operands
         result = firstOperand * secondOperand;
@@ -86,13 +115,10 @@ public class GamePlayController : MonoBehaviour
 
     private void LoadDragables()
     {
-        int index = -1;
         DraggableObject obj;
         bool next = false;
 
         List<DraggableObject> dragablesToLoad = new List<DraggableObject>();
-
-        List<Color> colorsUsed = new List<Color>();
 
         //Make a copy of dragables to assign content
         for (int i = 0; i < _dragables.Length; i++)
@@ -101,19 +127,57 @@ public class GamePlayController : MonoBehaviour
 
             _dragables[i].SetAtOrigin();
 
-            dragablesToLoad.Add(_dragables[i]);
+            //Check if it is needed based on current difficulty
+            if (i < currentDifficulty.AmountOfOptions)
+            {
+                _dragables[i].gameObject.SetActive(true);
+                dragablesToLoad.Add(_dragables[i]);
+            }
+            else
+            {
+                _dragables[i].gameObject.SetActive(false);
+            }
+            
         }
 
-        incorrectOperand = -1;
+        Debug.Log("Dragables to load: " + dragablesToLoad.Count);
 
-        while (incorrectOperand == firstOperand || incorrectOperand == secondOperand || incorrectOperand == -1)
+        //Get incorrect operands based on amount 
+        int amountOfIncorrectOperands = currentDifficulty.AvailableOperands.Length - 2;
+        List<int> operands = new List<int>(); //{ firstOperand, secondOperand, incorrectOperand };
+        operands.Add(firstOperand);
+        operands.Add(secondOperand);
+
+        int minOperand = currentDifficulty.AvailableOperands[0];
+        int maxOperand = currentDifficulty.AvailableOperands[currentDifficulty.AvailableOperands.Length - 1];
+        bool incorrectOperandIsOk = false;
+
+        for (int i = 0; i < amountOfIncorrectOperands; i++)
         {
-            incorrectOperand = Random.Range(0, 10);
-        }
+            incorrectOperandIsOk = false;
 
-        int[] operands = { firstOperand, secondOperand, incorrectOperand};
+            while (!incorrectOperandIsOk)
+            {
+                incorrectOperand = Random.Range(minOperand, maxOperand+1);
+
+                //Check if incorrect operand can get the correct result with one of the right operands
+                if (incorrectOperand * firstOperand == result || incorrectOperand * secondOperand == result)
+                    incorrectOperandIsOk = false;
+                else if (operands.Contains(incorrectOperand))
+                    incorrectOperandIsOk = false; // incorrectOperand != firstOperand && incorrectOperand != secondOperand;
+                else
+                    incorrectOperandIsOk = true;
+            }
+
+            Debug.Log("Incorrect operand [" + i + "] =  " + incorrectOperand);
+
+            operands.Add(incorrectOperand);
+        }
+        
         int operandIndex = 0;
         Color color;
+        List<Color> colorsUsed = new List<Color>();
+        int index = -1;
 
         while (dragablesToLoad.Count > 0)
         {
@@ -129,19 +193,22 @@ public class GamePlayController : MonoBehaviour
                 {
                     obj.SetContentValue(operands[operandIndex]);
 
-                    Debug.Log("Operand " + index + ", value: " + operands[operandIndex]);
+                    Debug.Log("Operand: " + operandIndex + ", value: " + operands[operandIndex] + ", is <color=" + ((operandIndex>1)?"red>incorrect":"green>correct") + "</color>");
 
-                    if (operandIndex != 2)
+                    //Set color of dragable object
+                    color = _objectColors[Random.Range(0, _objectColors.Length)];
+
+                    while (colorsUsed.Contains(color))
                     {
                         color = _objectColors[Random.Range(0, _objectColors.Length)];
+                    }
 
-                        while (colorsUsed.Contains(color))
-                        {
-                            color = _objectColors[Random.Range(0, _objectColors.Length)];
-                        }
+                    colorsUsed.Add(color);
+                    obj.SetColor(color);
 
-                        colorsUsed.Add(color);
-                        obj.SetColor(color);
+                    //If operand is first or second then load target places with their values and colors
+                    if (operandIndex < 2)
+                    {
                         _targets[operandIndex].Init();
                         _targets[operandIndex].SetAnswer(color, obj.ContentValue);
                     }
@@ -182,6 +249,8 @@ public class GamePlayController : MonoBehaviour
 
     private void CheckResult(int res)
     {
+        isPlaying = false;
+
         bool finalAnswer = result == res;
 
         if (finalAnswer)
@@ -212,6 +281,19 @@ public class GamePlayController : MonoBehaviour
         StartCoroutine(LoadScreenResult());
     }
 
+    private void EndOperationByTimeout()
+    {
+        isPlaying = false;
+
+        string sResult = "<color=red>RESULT</color> by <b>TIMEOUT</b>";
+
+        Debug.Log(sResult);
+
+        OnResult(false);
+
+        StartCoroutine(LoadScreenResult());
+    }
+
     private IEnumerator LoadScreenResult()
     {
         yield return new WaitForSeconds(_delayToShowResult);
@@ -221,15 +303,21 @@ public class GamePlayController : MonoBehaviour
     #endregion
 
     #region Public methods
-    public void InitSession()
+    public void InitSession(ScriptableDifficulty difficulty)
     {
+        currentDifficulty = difficulty;
+
         GenerateOperation();
 
         LoadDragables();
 
         LoadResult();
-    }
 
-   
+        isPlaying = true;
+
+        currentTimeProgress = currentDifficulty.TimePerOperation;
+
+        _sliderProgress.value = 1;
+    }
     #endregion
 }

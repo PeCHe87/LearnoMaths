@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class MainController : MonoBehaviour
 {
     public static System.Action<GameController.Screen> OnNext;
+    public static System.Action<int> OnSelectDifficulty;
 
     [SerializeField] private GameObject[] _optionsToSelect;
     [SerializeField] private GameObject _txtDifficultError;
@@ -51,11 +52,13 @@ public class MainController : MonoBehaviour
         //Hide options and show only the selected
         for (int i = 0; i < _optionsToSelect.Length; i++)
         {
-            _optionsToSelect[i].SetActive(option == i);            
+            _optionsToSelect[i].SetActive(option == i);
         }
 
         //Update option selected
         optionSelected = option;
+
+        OnSelectDifficulty(option);
 
         //Hide error label
         _txtDifficultError.SetActive(false);

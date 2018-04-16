@@ -10,6 +10,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private ScriptablePlayerInfo _playerInfo;
     [SerializeField] private Screen _currentScreen;
     [SerializeField] private GameObject _screenSplash, _screenMainMenu, _screenGameplay, _screenResult, _screenPlayerInfo;
+    [SerializeField] private ScriptableDifficulty[] _gameDifficulties;
+    [SerializeField] private int _currentGameDifficulty = -1;
 
     public ScriptablePlayerInfo PlayerInfo
     {
@@ -21,6 +23,7 @@ public class GameController : MonoBehaviour
     {
         SplashController.OnNext += NextScreen;
         MainController.OnNext += NextScreen;
+        MainController.OnSelectDifficulty += SelectDifficulty;
         PlayerInformationController.OnNext += NextScreen;
         GamePlayController.OnNext += NextScreen;
         GamePlayController.OnResult += UpdateSessionResult;
@@ -66,7 +69,7 @@ public class GameController : MonoBehaviour
                 _screenSplash.SetActive(false);
                 _screenMainMenu.SetActive(false);
                 _screenGameplay.SetActive(true);
-                _screenGameplay.GetComponent<GamePlayController>().InitSession();
+                _screenGameplay.GetComponent<GamePlayController>().InitSession(_gameDifficulties[_currentGameDifficulty]);
                 _screenResult.SetActive(false);
                 _screenPlayerInfo.SetActive(false);
                 break;
@@ -102,10 +105,16 @@ public class GameController : MonoBehaviour
         _screenResult.GetComponent<ResultController>().SetResult(result);
     }
 
+    private void SelectDifficulty(int dif)
+    {
+        _currentGameDifficulty = dif;
+    }
+
     private void OnDestroy()
     {
         SplashController.OnNext -= NextScreen;
         MainController.OnNext -= NextScreen;
+        MainController.OnSelectDifficulty -= SelectDifficulty;
         PlayerInformationController.OnNext -= NextScreen;
         GamePlayController.OnNext -= NextScreen;
         GamePlayController.OnResult -= UpdateSessionResult;

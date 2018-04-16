@@ -28,12 +28,13 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     public Vector3 OriginalPosition { get { return originalPosition; } set { originalPosition = value; } }
     public bool CanDrag { get { return _canDrag; } set { _canDrag = value; } }
     public int ContentValue { get { return contentValue;  }  set { contentValue = value; } }
+    public Color ColorBackground { get { return _colorBackground; } }
 
     private void Awake()
     {
         canvasParent = GetComponentInParent<Canvas>();
         m_DraggingPlane = transform as RectTransform;
-        originalPosition = transform.position;
+        originalPosition = m_DraggingPlane.anchoredPosition;
     }
 
     private void SetDraggedPosition(PointerEventData data)
@@ -92,13 +93,13 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void SetAtOrigin()
     {
-        if (firstTime)
+        /*if (firstTime)
         {
             firstTime = false;
             return;
-        }
+        }*/
 
-        transform.position = originalPosition;
+        m_DraggingPlane.anchoredPosition = originalPosition;
 
         _canDrag = true;
     }

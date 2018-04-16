@@ -13,6 +13,7 @@ public class TargetObject : MonoBehaviour
     public bool Available { get { return available; } set { available = value; } }
     public int CorrectNumber { get { return _correctNumber; } }
     public bool Answer { get { return _answer; } set { _answer = value; } }
+    public Color ColorBackground { get { return _imgBackground.color; } }
 
     public void SetAnswer(Color col, int val)
     {
