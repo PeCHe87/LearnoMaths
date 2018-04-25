@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Name: Hard
   m_EditorClassIdentifier: 
   Name: Hard
-  ExperienceReward: 30
+  ExperienceRewardPerCorrectQuestion: 15
   AvailableOperands: 00000000010000000200000003000000040000000500000006000000070000000800000009000000
   TimePerOperation: 10
   AmountOfOptions: 5
+  AmountOfQuestionsPerSession: 8
+  MinCorrrectAnswersForThreeStars: 6
+  MinCorrrectAnswersForTwoStars: 4
+  MinCorrrectAnswersForOneStar: 2

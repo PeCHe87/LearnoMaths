@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Name: Medium
   m_EditorClassIdentifier: 
   Name: Medium
-  ExperienceReward: 15
+  ExperienceRewardPerCorrectQuestion: 10
   AvailableOperands: 010000000200000003000000040000000500000006000000
   TimePerOperation: 20
   AmountOfOptions: 4
+  AmountOfQuestionsPerSession: 5
+  MinCorrrectAnswersForThreeStars: 4
+  MinCorrrectAnswersForTwoStars: 2
+  MinCorrrectAnswersForOneStar: 1

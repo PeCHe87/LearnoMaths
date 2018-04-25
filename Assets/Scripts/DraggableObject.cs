@@ -79,11 +79,6 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         OnFinishedDrag(this);
     }
 
-    public void BackOriginalPosition()
-    {
-        transform.position = originalPosition;
-    }
-
     public void SetContentValue(int val)
     {
         contentValue = val;
@@ -93,12 +88,6 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void SetAtOrigin()
     {
-        /*if (firstTime)
-        {
-            firstTime = false;
-            return;
-        }*/
-
         m_DraggingPlane.anchoredPosition = originalPosition;
 
         _canDrag = true;

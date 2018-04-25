@@ -100,9 +100,9 @@ public class GameController : MonoBehaviour
         ShowScreen();
     }
 
-    private void UpdateSessionResult(bool result)
+    private void UpdateSessionResult(int result, ScriptableDifficulty difficulty)
     {
-        _screenResult.GetComponent<ResultController>().SetResult(result);
+        _screenResult.GetComponent<ResultController>().SetResult(result, difficulty);
     }
 
     private void SelectDifficulty(int dif)

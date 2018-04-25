@@ -7,16 +7,21 @@ using UnityEngine.UI;
 public class GamePlayController : MonoBehaviour
 {
     public static System.Action<GameController.Screen> OnNext;
-    public static System.Action<bool> OnResult;
+    public static System.Action<int, ScriptableDifficulty> OnResult;
 
     [SerializeField] private TargetObject[] _targets;
+    [SerializeField] private Image[] _colorGuides;
     [SerializeField] private DraggableObject[] _dragables;
     [SerializeField] private Color[] _objectColors;
     [SerializeField] private float _distanceAllow;
     [SerializeField] private TextMeshProUGUI _textResult;
     [SerializeField] private Slider _sliderProgress;
     [SerializeField] private float _speedTimeProgress;
+    [SerializeField] private float _delayToShowNextQuestion = 1;
     [SerializeField] private float _delayToShowResult = 1;
+    [SerializeField] private Text _txtQuestions;
+    [SerializeField] private Text _txtQuestionResult;
+    [SerializeField] private Text _txtExperience;
 
     int result = 0;
     int firstOperand = 0;
@@ -25,6 +30,10 @@ public class GamePlayController : MonoBehaviour
     ScriptableDifficulty currentDifficulty = null;
     private bool isPlaying = false;
     private float currentTimeProgress = 0;
+    private int amountOfQuestions = 0;
+    private int currentExperience = 0;
+    private int currentQuestion = 0;
+    private int correctQuestions = 0;
 
     #region Private methods
     private void Awake()
@@ -74,7 +83,7 @@ public class GamePlayController : MonoBehaviour
 
                     obj.CanDrag = false;
 
-                    target.Answer = (obj.ContentValue == target.CorrectNumber && obj.ColorBackground == target.ColorBackground);
+                    target.Answer = (obj.ContentValue == target.CorrectNumber);     // (obj.ContentValue == target.CorrectNumber && obj.ColorBackground == target.ColorBackground);
 
                     Debug.Log("Finish drag -> correct value: " + target.Answer);
 
@@ -88,7 +97,7 @@ public class GamePlayController : MonoBehaviour
             }
         }
 
-        obj.BackOriginalPosition();
+        obj.SetAtOrigin();  //obj.BackOriginalPosition();
     }
 
     private void OnDestroy()
@@ -211,6 +220,9 @@ public class GamePlayController : MonoBehaviour
                     {
                         _targets[operandIndex].Init();
                         _targets[operandIndex].SetAnswer(color, obj.ContentValue);
+
+                        //Set color of guide
+                        _colorGuides[operandIndex].color = color;
                     }
 
                     operandIndex++;
@@ -276,9 +288,35 @@ public class GamePlayController : MonoBehaviour
 
         Debug.Log(sResult);
 
-        OnResult(finalAnswer);
+        CheckIfSessionHasFinished(result == res, finalAnswer);
+    }
 
-        StartCoroutine(LoadScreenResult());
+    private void CheckIfSessionHasFinished(bool operationResult, bool finalAnswer)
+    {
+        //Show question result
+        _txtQuestionResult.text = (operationResult) ? "CORRECTA" : "INCORRECTA";
+
+        //Increment current experience based on question result
+        currentExperience += (operationResult) ? currentDifficulty.ExperienceRewardPerCorrectQuestion : 0;
+
+        if (operationResult)
+            correctQuestions++;
+
+        //Update experience text
+        _txtExperience.text = "EXP: " + currentExperience;
+
+        //Increment question
+        currentQuestion++;
+
+        //Check if has to show next question or final result
+        if (currentQuestion < amountOfQuestions)
+            StartCoroutine(NextQuestion());
+        else
+        {
+            OnResult(correctQuestions, currentDifficulty);
+
+            StartCoroutine(LoadScreenResult());
+        }
     }
 
     private void EndOperationByTimeout()
@@ -289,9 +327,7 @@ public class GamePlayController : MonoBehaviour
 
         Debug.Log(sResult);
 
-        OnResult(false);
-
-        StartCoroutine(LoadScreenResult());
+        CheckIfSessionHasFinished(false, false);
     }
 
     private IEnumerator LoadScreenResult()
@@ -300,24 +336,56 @@ public class GamePlayController : MonoBehaviour
 
         OnNext(GameController.Screen.RESULT);
     }
-    #endregion
 
-    #region Public methods
-    public void InitSession(ScriptableDifficulty difficulty)
+    private IEnumerator NextQuestion()
     {
-        currentDifficulty = difficulty;
+        yield return new WaitForSeconds(_delayToShowNextQuestion);
 
+        GenerateQuestion();
+    }
+
+    private void GenerateQuestion()
+    {
+        //Generate another question
         GenerateOperation();
 
         LoadDragables();
 
         LoadResult();
 
-        isPlaying = true;
+        //Reset slider progress
+        _sliderProgress.value = 1;
 
+        //Reset time to answer the new question
         currentTimeProgress = currentDifficulty.TimePerOperation;
 
-        _sliderProgress.value = 1;
+        //Update text of current question
+        _txtQuestions.text = (currentQuestion + 1) + "/" + amountOfQuestions;
+
+        //Update experience text
+        _txtExperience.text = "EXP: " + currentExperience;
+
+        //Hide text question result
+        _txtQuestionResult.text = string.Empty;
+
+        isPlaying = true;
+    }
+    #endregion
+
+    #region Public methods
+    public void InitSession(ScriptableDifficulty difficulty)
+    {
+        correctQuestions = 0;
+
+        currentDifficulty = difficulty;
+
+        amountOfQuestions = currentDifficulty.AmountOfQuestionsPerSession;
+
+        currentQuestion = 0;
+
+        currentExperience = 0;
+
+        GenerateQuestion();
     }
     #endregion
 }

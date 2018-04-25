@@ -17,7 +17,7 @@ public class TargetObject : MonoBehaviour
 
     public void SetAnswer(Color col, int val)
     {
-        _imgBackground.color = col;
+        //_imgBackground.color = col;
         _correctNumber = val;
     }
 

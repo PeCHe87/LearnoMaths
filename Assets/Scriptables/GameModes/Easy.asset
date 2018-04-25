@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Name: Easy
   m_EditorClassIdentifier: 
   Name: Easy
-  ExperienceReward: 5
+  ExperienceRewardPerCorrectQuestion: 5
   AvailableOperands: 010000000200000003000000
   TimePerOperation: 30
   AmountOfOptions: 3
+  AmountOfQuestionsPerSession: 3
+  MinCorrrectAnswersForThreeStars: 3
+  MinCorrrectAnswersForTwoStars: 2
+  MinCorrrectAnswersForOneStar: 1
