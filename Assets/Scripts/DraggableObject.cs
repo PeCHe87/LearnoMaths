@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Image))]
+//[RequireComponent(typeof(Image))]
 public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     public static System.Action<DraggableObject> OnFinishedDrag;
@@ -11,7 +11,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [SerializeField] private bool dragOnSurfaces = false;
     [SerializeField] private bool _canDrag = true;
     [SerializeField] private TextMeshProUGUI _text;
-    [SerializeField] private Image _imgBackground;
+    [SerializeField] private Image _imgBackground, _imgBackground2;
     [SerializeField] private Color _colorBackground;
     [SerializeField] private bool _canDebug = false;
 
@@ -98,5 +98,6 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         _colorBackground = col;
 
         _imgBackground.color = col;
+        _imgBackground2.color = col;
     }
 }
