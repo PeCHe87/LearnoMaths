@@ -22,6 +22,20 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private Text _txtQuestions;
     [SerializeField] private Text _txtQuestionResult;
     [SerializeField] private Text _txtExperience;
+    [SerializeField] private Transform _dragableContainer, _dragableContainerInGame;
+    [SerializeField] private float _scaleDragging = 1.3f;
+
+    [Header("Timer")]
+    [SerializeField] private float _progressToShowAlarm;
+    [SerializeField] private Image _imgAlarm;
+    [SerializeField] private Sprite _alarmOff, _alarmOn;
+    [SerializeField] private float _timeToOscillateAlarm;
+    [SerializeField] private Image _timerProgress;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource _audioSourceAnswer;
+    [SerializeField] private AudioSource _audioSourceAlarm;
+    [SerializeField] private AudioClip _clipCorrectAnswer, _clipIncorrectAnswer;
 
     int result = 0;
     int firstOperand = 0;
@@ -34,10 +48,13 @@ public class GamePlayController : MonoBehaviour
     private int currentExperience = 0;
     private int currentQuestion = 0;
     private int correctQuestions = 0;
+    private float timeToChangeAlarmSprite = 0;
+    private bool isShowingAlarmOn = false;
 
     #region Private methods
     private void Awake()
     {
+        DraggableObject.OnStartedDrag += DraggableObjectStartedDrag;
         DraggableObject.OnFinishedDrag += DraggableObjectFinishedDrag;
     }
 
@@ -50,7 +67,34 @@ public class GamePlayController : MonoBehaviour
 
         float progress = currentTimeProgress / currentDifficulty.TimePerOperation;
 
-        _sliderProgress.value = progress;
+        //_sliderProgress.value = progress;
+
+        _timerProgress.fillAmount = 1 - progress;
+
+        //Alarm
+        if (_timerProgress.fillAmount < 1 && _timerProgress.fillAmount >= _progressToShowAlarm)
+        {
+            if (!_audioSourceAlarm.isPlaying)
+                _audioSourceAlarm.Play();
+
+            timeToChangeAlarmSprite += Time.deltaTime;
+
+            if (timeToChangeAlarmSprite >= _timeToOscillateAlarm)
+            {
+                if (isShowingAlarmOn)
+                {
+                    _imgAlarm.sprite = _alarmOff;
+                    isShowingAlarmOn = false;
+                }
+                else
+                {
+                    _imgAlarm.sprite = _alarmOn;
+                    isShowingAlarmOn = true;
+                }
+
+                timeToChangeAlarmSprite = 0;
+            }
+        }
 
         if (currentTimeProgress <= 0)
             EndOperationByTimeout();
@@ -81,13 +125,21 @@ public class GamePlayController : MonoBehaviour
 
                     obj.transform.position = targetPos;
 
+                    obj.PutInPlace();
+
                     obj.CanDrag = false;
 
-                    target.Answer = (obj.ContentValue == target.CorrectNumber);     // (obj.ContentValue == target.CorrectNumber && obj.ColorBackground == target.ColorBackground);
+                    target.Answer = (obj.ContentValue == firstOperand || obj.ContentValue == secondOperand);  // (obj.ContentValue == target.CorrectNumber);     // (obj.ContentValue == target.CorrectNumber && obj.ColorBackground == target.ColorBackground);
 
                     Debug.Log("Finish drag -> correct value: " + target.Answer);
 
                     //TODO: show a feedback sound/vfx of answer
+
+                    //SFX feedback
+                    if (target.Answer)
+                        _audioSourceAnswer.PlayOneShot(_clipCorrectAnswer);
+                    else
+                        _audioSourceAnswer.PlayOneShot(_clipIncorrectAnswer);
 
                     //Control if operation has finished
                     CheckFinishOperation();
@@ -97,11 +149,20 @@ public class GamePlayController : MonoBehaviour
             }
         }
 
+        obj.transform.SetParent(_dragableContainer);
+
         obj.SetAtOrigin();  //obj.BackOriginalPosition();
+    }
+
+    private void DraggableObjectStartedDrag(DraggableObject obj)
+    {
+        obj.transform.localScale = Vector3.one * _scaleDragging;
+        obj.transform.SetParent(_dragableContainerInGame);
     }
 
     private void OnDestroy()
     {
+        DraggableObject.OnStartedDrag -= DraggableObjectStartedDrag;
         DraggableObject.OnFinishedDrag -= DraggableObjectFinishedDrag;
     }
 
@@ -133,6 +194,8 @@ public class GamePlayController : MonoBehaviour
         for (int i = 0; i < _dragables.Length; i++)
         {
             _dragables[i].SetContentValue(-1);
+
+            _dragables[i].transform.SetParent(_dragableContainer);
 
             _dragables[i].SetAtOrigin();
 
@@ -308,6 +371,10 @@ public class GamePlayController : MonoBehaviour
         //Increment question
         currentQuestion++;
 
+        //Stop alarm audio
+        if (_audioSourceAlarm.isPlaying)
+            _audioSourceAlarm.Stop();
+
         //Check if has to show next question or final result
         if (currentQuestion < amountOfQuestions)
             StartCoroutine(NextQuestion());
@@ -354,7 +421,17 @@ public class GamePlayController : MonoBehaviour
         LoadResult();
 
         //Reset slider progress
-        _sliderProgress.value = 1;
+        //_sliderProgress.value = 1;
+
+        _timerProgress.fillAmount = 0;
+
+        //Alarm
+        _imgAlarm.sprite = _alarmOff;
+        isShowingAlarmOn = false;
+        timeToChangeAlarmSprite = 0;
+
+        if (_audioSourceAlarm.isPlaying)
+            _audioSourceAlarm.Stop();
 
         //Reset time to answer the new question
         currentTimeProgress = currentDifficulty.TimePerOperation;

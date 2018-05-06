@@ -6,6 +6,7 @@ using UnityEngine.UI;
 //[RequireComponent(typeof(Image))]
 public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
+    public static System.Action<DraggableObject> OnStartedDrag;
     public static System.Action<DraggableObject> OnFinishedDrag;
 
     [SerializeField] private bool dragOnSurfaces = false;
@@ -13,6 +14,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     [SerializeField] private TextMeshProUGUI _text;
     [SerializeField] private Image _imgBackground, _imgBackground2;
     [SerializeField] private Color _colorBackground;
+    [SerializeField] private GameObject _border, _background;
     [SerializeField] private bool _canDebug = false;
 
     #region Private variables
@@ -60,6 +62,8 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
         if (canvasParent == null)
             return;
 
+        OnStartedDrag(this);
+
         SetDraggedPosition(eventData);
 
         if (_canDebug)
@@ -90,6 +94,11 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
     {
         m_DraggingPlane.anchoredPosition = originalPosition;
 
+        transform.localScale = Vector3.one;
+
+        _border.SetActive(true);
+        _background.SetActive(true);
+
         _canDrag = true;
     }
 
@@ -99,5 +108,11 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
         _imgBackground.color = col;
         _imgBackground2.color = col;
+    }
+
+    public void PutInPlace()
+    {
+        _border.SetActive(false);
+        _background.SetActive(false);
     }
 }
