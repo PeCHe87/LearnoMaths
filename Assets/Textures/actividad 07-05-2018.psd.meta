@@ -1,0 +1,105 @@
+fileFormatVersion: 2
+guid: 91ad83ac9ac01394d9acbfe44fba40bc
+timeCreated: 1525786713
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName: {}
+  serializedVersion: 4
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: -1
+    aniso: -1
+    mipBias: -1
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites: []
+    outline: []
+    physicsShape: []
+  spritePackingTag: 
+  userData: '{"fileNaming":"LayerNameOnly","groupMode":"ParentOnly","PackingTag":null,"TargetDirectory":"Assets/Textures/Menu_layers","AutoImport":false,"DefaultAlignment":"Center","DefaultPivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","DocAlignment":"Center","DocPivot":{"x":0.5,"y":0.5},"DocRoot":{"name":"DOCUMENT_ROOT","path":null,"indexId":[-1],"import":false,"useDefaults":false,"Alignment":"Center","Pivot":{"x":0.0,"y":0.0},"ScaleFactor":"Full","Childs":[{"name":"compuerta
+    - s\u00edmbolo restar","path":"compuerta - s\u00edmbolo restar","indexId":[0],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    - s\u00edmbolo sumar","path":"compuerta - s\u00edmbolo sumar","indexId":[1],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    - s\u00edmbolo dividir","path":"compuerta - s\u00edmbolo dividir","indexId":[2],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    - s\u00edmbolo multiplicar","path":"compuerta - s\u00edmbolo multiplicar","indexId":[3],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    B","path":"compuerta B","indexId":[4],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    A","path":"compuerta A","indexId":[5],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    restar (preview)","path":"compuerta restar (preview)","indexId":[6],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    sumar (preview)","path":"compuerta sumar (preview)","indexId":[7],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    dividir (preview)","path":"compuerta dividir (preview)","indexId":[8],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"compuerta
+    multiplicar (preview)","path":"compuerta multiplicar (preview)","indexId":[9],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - fondo","path":"nivel - fondo","indexId":[10],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - perilla dif\u00edcil off","path":"nivel - perilla dif\u00edcil off","indexId":[11],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - perilla medio off","path":"nivel - perilla medio off","indexId":[12],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - perilla f\u00e1cil off","path":"nivel - perilla f\u00e1cil off","indexId":[13],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - perilla dif\u00edcil on","path":"nivel - perilla dif\u00edcil on","indexId":[14],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - perilla medio on","path":"nivel - perilla medio on","indexId":[15],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - perilla f\u00e1cil on","path":"nivel - perilla f\u00e1cil on","indexId":[16],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - luz off","path":"nivel - luz off","indexId":[17],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - luz on","path":"nivel - luz on","indexId":[18],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - textos (temporal)","path":"nivel - textos (temporal)","indexId":[19],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - preview 3","path":"nivel - preview 3","indexId":[20],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - preview 2","path":"nivel - preview 2","indexId":[21],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"nivel
+    - preview 1","path":"nivel - preview 1","indexId":[22],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"men\u00fa
+    principal - fondo","path":"men\u00fa principal - fondo","indexId":[23],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"men\u00fa
+    principal - temporal","path":"men\u00fa principal - temporal","indexId":[24],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"men\u00fa
+    principal - puertas abiertas adelante","path":"men\u00fa principal - puertas abiertas
+    adelante","indexId":[25],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"men\u00fa
+    principal - puertas abiertas (preview)","path":"men\u00fa principal - puertas
+    abiertas (preview)","indexId":[26],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]},{"name":"men\u00fa
+    principal - puertas cerradas (preview)","path":"men\u00fa principal - puertas
+    cerradas (preview)","indexId":[27],"import":true,"useDefaults":true,"Alignment":"Center","Pivot":{"x":0.5,"y":0.5},"ScaleFactor":"Full","Childs":[]}]}}'
+  assetBundleName: 
+  assetBundleVariant: 

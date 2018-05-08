@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: c7f1c2dd8e2d0414eb80cdb2fa169332
+timeCreated: 1525786705
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Numbers Fran
+  fontNames:
+  - Numbers Fran
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

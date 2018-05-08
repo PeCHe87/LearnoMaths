@@ -12,12 +12,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _screenSplash, _screenMainMenu, _screenGameplay, _screenResult, _screenPlayerInfo;
     [SerializeField] private ScriptableDifficulty[] _gameDifficulties;
     [SerializeField] private int _currentGameDifficulty = -1;
+    [SerializeField] private DoorsController _doorsController;
 
     public ScriptablePlayerInfo PlayerInfo
     {
         get { return _playerInfo; }
         set { _playerInfo = value; }
     }
+    public DoorsController Doors { get { return _doorsController; } }
 
     private void Awake()
     {
@@ -42,6 +44,8 @@ public class GameController : MonoBehaviour
         //_screenResult.GetComponent<ResultController>().SetGameController(this);
         _screenPlayerInfo.GetComponent<PlayerInformationController>().SetGameController(this);
 
+        _doorsController.OpenDoors(true);
+
         ShowScreen();
     }
 
@@ -60,6 +64,7 @@ public class GameController : MonoBehaviour
             case Screen.MAIN_MENU:
                 _screenSplash.SetActive(false);
                 _screenMainMenu.SetActive(true);
+                _screenMainMenu.GetComponent<MainController>().InitScreen();
                 _screenGameplay.SetActive(false);
                 _screenResult.SetActive(false);
                 _screenPlayerInfo.SetActive(false);
