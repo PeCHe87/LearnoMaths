@@ -74,7 +74,7 @@ public class GameController : MonoBehaviour
                 _screenSplash.SetActive(false);
                 _screenMainMenu.SetActive(false);
                 _screenGameplay.SetActive(true);
-                _screenGameplay.GetComponent<GamePlayController>().InitSession(_gameDifficulties[_currentGameDifficulty]);
+                _screenGameplay.GetComponent<GamePlayController>().InitSession(_gameDifficulties[_currentGameDifficulty], _playerInfo);
                 _screenResult.SetActive(false);
                 _screenPlayerInfo.SetActive(false);
                 break;

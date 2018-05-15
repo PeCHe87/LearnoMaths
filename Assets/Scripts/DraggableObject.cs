@@ -92,7 +92,7 @@ public class DraggableObject : MonoBehaviour, IBeginDragHandler, IDragHandler, I
 
     public void SetAtOrigin()
     {
-        m_DraggingPlane.anchoredPosition = originalPosition;
+        //m_DraggingPlane.anchoredPosition = originalPosition;
 
         transform.localScale = Vector3.one;
 

@@ -10,4 +10,9 @@ public class ScriptablePlayerInfo : ScriptableObject
     public int CurrentLevel;
     public int CurrentExperience;
     public int[] LevelsExperience;
+
+    public int GetTotalExperienceForLevel(int level)
+    {
+        return LevelsExperience[level];
+    }
 }

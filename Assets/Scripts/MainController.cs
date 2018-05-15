@@ -16,6 +16,8 @@ public class MainController : MonoBehaviour
     [SerializeField] private Button _btnDifficulty1, _btnDifficulty2, _btnDifficulty3;
     [SerializeField] private Sprite[] _spriteButtonsOn, _spriteButtonsOff;
     [SerializeField] private Sprite _spriteLightOn, _SpriteLightOff;
+    [SerializeField] private Sprite _spriteButtonStartOn, _SpriteButtonStartOff;
+    [SerializeField] private Image _imgButtonStart;
     [SerializeField] private float _timeToShowGameplay;
 
     private int optionSelected = -1;
@@ -28,6 +30,8 @@ public class MainController : MonoBehaviour
 
     public void InitScreen()
     {
+        _imgButtonStart.sprite = _SpriteButtonStartOff;
+
         //Hide options selected
         for (int i = 0; i < _optionsToSelect.Length; i++)
         {
@@ -54,9 +58,12 @@ public class MainController : MonoBehaviour
         _txtDifficultError.SetActive(false);
     }
 
-    private IEnumerator InitGamePlay()
+    public void InitGamePlay()
     {
-        yield return new WaitForSeconds(_timeToShowGameplay);
+        //yield return new WaitForSeconds(_timeToShowGameplay);
+
+        if (optionSelected == -1)
+            return;
 
         gameController.Doors.CloseDoors(ShowGamePlay);
     }
@@ -92,6 +99,9 @@ public class MainController : MonoBehaviour
 
     public void SelectOption(int option)
     {
+        if (optionSelected == option)
+            return;
+
         //Hide options and show only the selected
         for (int i = 0; i < _optionsToSelect.Length; i++)
         {
@@ -116,7 +126,9 @@ public class MainController : MonoBehaviour
         //Hide error label
         _txtDifficultError.SetActive(false);
 
-        StartCoroutine(InitGamePlay());
+        //StartCoroutine(InitGamePlay());
+
+        _imgButtonStart.sprite = _spriteButtonStartOn;
     }
 
     public void SelectDoor(int option)
@@ -163,5 +175,12 @@ public class MainController : MonoBehaviour
     public void SetGameController(GameController controller)
     {
         gameController = controller;
+    }
+
+    public void CleanPlayerProgress()
+    {
+        gameController.PlayerInfo.CurrentExperience = 0;
+        gameController.PlayerInfo.CurrentLevel = 0;
+        gameController.PlayerInfo.CurrentDifficulty = -1;
     }
 }

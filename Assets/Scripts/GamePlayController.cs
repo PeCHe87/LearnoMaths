@@ -32,6 +32,13 @@ public class GamePlayController : MonoBehaviour
     [SerializeField] private float _timeToOscillateAlarm;
     [SerializeField] private Image _timerProgress;
 
+    [Header("Questions progress")]
+    [SerializeField] private Image _questionsProgress;
+
+    [Header("Experience progress")]
+    [SerializeField] private Image _experienceProgress;
+    [SerializeField] private TextMeshProUGUI _txtLevel;
+
     [Header("Audio")]
     [SerializeField] private AudioSource _audioSourceAnswer;
     [SerializeField] private AudioSource _audioSourceAlarm;
@@ -50,6 +57,8 @@ public class GamePlayController : MonoBehaviour
     private int correctQuestions = 0;
     private float timeToChangeAlarmSprite = 0;
     private bool isShowingAlarmOn = false;
+    private int totalExperienceForLevel = 0;
+    private ScriptablePlayerInfo playerInfo;
 
     #region Private methods
     private void Awake()
@@ -224,9 +233,20 @@ public class GamePlayController : MonoBehaviour
         int maxOperand = currentDifficulty.AvailableOperands[currentDifficulty.AvailableOperands.Length - 1];
         bool incorrectOperandIsOk = false;
 
+        List<int> possibleOperands = new List<int>();
+        int[] availables = currentDifficulty.AvailableOperands;
+
+        for (int i = 0; i < availables.Length; i++)
+        {
+            if (availables[i] != firstOperand && availables[i] != secondOperand)
+            {
+                possibleOperands.Add(availables[i]);
+            }
+        }
+
         for (int i = 0; i < amountOfIncorrectOperands; i++)
         {
-            incorrectOperandIsOk = false;
+            /**incorrectOperandIsOk = false;
 
             while (!incorrectOperandIsOk)
             {
@@ -239,7 +259,14 @@ public class GamePlayController : MonoBehaviour
                     incorrectOperandIsOk = false; // incorrectOperand != firstOperand && incorrectOperand != secondOperand;
                 else
                     incorrectOperandIsOk = true;
-            }
+
+                incorrectOperandIsOk = true;
+            }*/
+
+            int indexOp = Random.Range(0, possibleOperands.Count);
+            incorrectOperand = possibleOperands[indexOp];
+
+            possibleOperands.RemoveAt(indexOp);
 
             Debug.Log("Incorrect operand [" + i + "] =  " + incorrectOperand);
 
@@ -361,12 +388,36 @@ public class GamePlayController : MonoBehaviour
 
         //Increment current experience based on question result
         currentExperience += (operationResult) ? currentDifficulty.ExperienceRewardPerCorrectQuestion : 0;
+        playerInfo.CurrentExperience = currentExperience;
+
+        //Check if level up
+        if (currentExperience > totalExperienceForLevel)
+        {
+            if (playerInfo.CurrentLevel < playerInfo.LevelsExperience.Length-1)
+            {
+                playerInfo.CurrentLevel++;
+                playerInfo.CurrentExperience = 0;
+
+                _txtLevel.text = (playerInfo.CurrentLevel + 1).ToString();
+                currentExperience = 0;
+
+                totalExperienceForLevel = playerInfo.GetTotalExperienceForLevel(playerInfo.CurrentLevel);
+
+                Debug.Log("<b><color=yellow>LEVEL UP</color></b> Current level: " + playerInfo.CurrentLevel.ToString());
+            }
+        }
+
+        //Question progress
+        _questionsProgress.fillAmount = ((float)(currentQuestion + 1) / (float)amountOfQuestions);
+
+        float progress = (float)currentExperience / (float)totalExperienceForLevel;
+        _experienceProgress.fillAmount = progress;
 
         if (operationResult)
             correctQuestions++;
 
         //Update experience text
-        _txtExperience.text = "EXP: " + currentExperience;
+        _txtExperience.text = "EXP: " + currentExperience + "/" + totalExperienceForLevel + ", fill amount: " + _experienceProgress.fillAmount;
 
         //Increment question
         currentQuestion++;
@@ -436,11 +487,13 @@ public class GamePlayController : MonoBehaviour
         //Reset time to answer the new question
         currentTimeProgress = currentDifficulty.TimePerOperation;
 
+        //_questionsProgress.fillAmount = ((float)(currentQuestion + 1) / (float)amountOfQuestions);
+
         //Update text of current question
-        _txtQuestions.text = (currentQuestion + 1) + "/" + amountOfQuestions;
+        _txtQuestions.text = (currentQuestion + 1) + "/" + amountOfQuestions + ", fill: " + _questionsProgress.fillAmount;
 
         //Update experience text
-        _txtExperience.text = "EXP: " + currentExperience;
+        _txtExperience.text = "EXP: " + currentExperience + "/" + totalExperienceForLevel + ", fill: " + _experienceProgress.fillAmount;
 
         //Hide text question result
         _txtQuestionResult.text = string.Empty;
@@ -450,8 +503,12 @@ public class GamePlayController : MonoBehaviour
     #endregion
 
     #region Public methods
-    public void InitSession(ScriptableDifficulty difficulty)
+    public void InitSession(ScriptableDifficulty difficulty, ScriptablePlayerInfo info)
     {
+        playerInfo = info;
+
+        totalExperienceForLevel = playerInfo.GetTotalExperienceForLevel(playerInfo.CurrentLevel);
+
         correctQuestions = 0;
 
         currentDifficulty = difficulty;
@@ -460,7 +517,14 @@ public class GamePlayController : MonoBehaviour
 
         currentQuestion = 0;
 
-        currentExperience = 0;
+        currentExperience = playerInfo.CurrentExperience;
+
+        _experienceProgress.fillAmount = (float)currentExperience / (float)totalExperienceForLevel;
+
+        _txtLevel.text = (playerInfo.CurrentLevel + 1).ToString();
+
+        //Question progress
+        _questionsProgress.fillAmount = 0;
 
         GenerateQuestion();
     }

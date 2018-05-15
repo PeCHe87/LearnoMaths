@@ -77,7 +77,7 @@ public class DoorsController : MonoBehaviour
             _leftDoor.anchoredPosition = Vector3.Lerp(_leftDoor.anchoredPosition, doorOriginL, Time.deltaTime * _speedDoorsClose);
             _rightDoor.anchoredPosition = Vector3.Lerp(_rightDoor.anchoredPosition, doorOriginR, Time.deltaTime * _speedDoorsClose);
 
-            Debug.Log("CloseDoors::Moving doors");
+            //Debug.Log("CloseDoors::Moving doors");
 
             //check if they are near to be closed
             if (Mathf.Abs(_leftDoor.anchoredPosition.x - doorOriginL.x) < 0.05f && Mathf.Abs(_rightDoor.anchoredPosition.x - doorOriginR.x) < 0.05f)
