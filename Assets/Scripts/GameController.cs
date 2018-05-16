@@ -64,7 +64,7 @@ public class GameController : MonoBehaviour
             case Screen.MAIN_MENU:
                 _screenSplash.SetActive(false);
                 _screenMainMenu.SetActive(true);
-                _screenMainMenu.GetComponent<MainController>().InitScreen();
+                _screenMainMenu.GetComponent<MainController>().InitScreen(); // _currentScreen != Screen.SPLASH);
                 _screenGameplay.SetActive(false);
                 _screenResult.SetActive(false);
                 _screenPlayerInfo.SetActive(false);
@@ -74,7 +74,7 @@ public class GameController : MonoBehaviour
                 _screenSplash.SetActive(false);
                 _screenMainMenu.SetActive(false);
                 _screenGameplay.SetActive(true);
-                _screenGameplay.GetComponent<GamePlayController>().InitSession(_gameDifficulties[_currentGameDifficulty], _playerInfo);
+                _screenGameplay.GetComponent<GamePlayController>().InitSession(_gameDifficulties[_currentGameDifficulty], _playerInfo, this);
                 _screenResult.SetActive(false);
                 _screenPlayerInfo.SetActive(false);
                 break;
@@ -82,7 +82,7 @@ public class GameController : MonoBehaviour
             case Screen.RESULT:
                 _screenSplash.SetActive(false);
                 _screenMainMenu.SetActive(false);
-                _screenGameplay.SetActive(false);
+               // _screenGameplay.SetActive(false);
                 _screenResult.SetActive(true);
                 _screenPlayerInfo.SetActive(false);
                 break;

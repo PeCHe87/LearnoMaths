@@ -12,6 +12,7 @@ public class DoorsController : MonoBehaviour
 
     private Vector3 doorOriginL = Vector3.zero;
     private Vector3 doorOriginR = Vector3.zero;
+    private bool openningDoors = false;
 
     private void Awake()
     {
@@ -34,34 +35,50 @@ public class DoorsController : MonoBehaviour
         }
     }
 
-    private IEnumerator OpenDoorsSmooth(OnOpenComplete callback)
+    private IEnumerator OpenDoorsSmooth(OnOpenComplete callback = null)
     {
-        bool areOpened = false;
-
-        Vector3 destL = doorOriginL - new Vector3(_offsetToOpenDoorL, 0, 0);
-        Vector3 destR = doorOriginR + new Vector3(_offsetToOpenDoorR, 0, 0);
-
-        while (!areOpened)
+        if (openningDoors)
         {
-            //Move doors
-            _leftDoor.anchoredPosition = Vector3.Lerp(_leftDoor.anchoredPosition, destL, Time.deltaTime * _speedDoorsOpen);
-            _rightDoor.anchoredPosition = Vector3.Lerp(_rightDoor.anchoredPosition, destR, Time.deltaTime * _speedDoorsOpen);
-
-            //Check if they are near to be opened
-            if (Mathf.Abs(_leftDoor.anchoredPosition.x - destL.x) < 0.1f && Mathf.Abs(_rightDoor.anchoredPosition.x - destR.x) < 0.1f)
-                areOpened = true;
-
             yield return null;
         }
+        else
+        {
+            openningDoors = true;
 
-        Debug.Log("OpenDoors::OnComplete");
+            bool areOpened = false;
 
-        if (callback != null)
-            callback();
+            Vector3 destL = doorOriginL - new Vector3(_offsetToOpenDoorL, 0, 0);
+            Vector3 destR = doorOriginR + new Vector3(_offsetToOpenDoorR, 0, 0);
+
+            while (!areOpened && openningDoors)
+            {
+                //Move doors
+                _leftDoor.anchoredPosition = Vector3.Lerp(_leftDoor.anchoredPosition, destL, Time.deltaTime * _speedDoorsOpen);
+                _rightDoor.anchoredPosition = Vector3.Lerp(_rightDoor.anchoredPosition, destR, Time.deltaTime * _speedDoorsOpen);
+
+                //Check if they are near to be opened
+                if (Mathf.Abs(_leftDoor.anchoredPosition.x - destL.x) < 0.1f && Mathf.Abs(_rightDoor.anchoredPosition.x - destR.x) < 0.1f)
+                    areOpened = true;
+
+                yield return null;
+            }
+
+            Debug.Log("OpenDoors::OnComplete");
+
+            if (areOpened)
+            {
+                if (callback != null)
+                    callback();
+            }
+
+            openningDoors = false;
+        }
     }
 
     public void CloseDoors(OnCloseComplete callback)
     {
+        openningDoors = false;
+
         StartCoroutine(CloseDoorsSmooth(callback));
     }
 

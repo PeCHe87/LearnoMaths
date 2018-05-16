@@ -17,6 +17,6 @@ MonoBehaviour:
   TimePerOperation: 20
   AmountOfOptions: 4
   AmountOfQuestionsPerSession: 5
-  MinCorrrectAnswersForThreeStars: 4
-  MinCorrrectAnswersForTwoStars: 2
+  MinCorrrectAnswersForThreeStars: 5
+  MinCorrrectAnswersForTwoStars: 3
   MinCorrrectAnswersForOneStar: 1

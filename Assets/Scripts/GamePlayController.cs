@@ -59,6 +59,7 @@ public class GamePlayController : MonoBehaviour
     private bool isShowingAlarmOn = false;
     private int totalExperienceForLevel = 0;
     private ScriptablePlayerInfo playerInfo;
+    private GameController gameController;
 
     #region Private methods
     private void Awake()
@@ -500,11 +501,21 @@ public class GamePlayController : MonoBehaviour
 
         isPlaying = true;
     }
+
+    private void LoadMainMenu()
+    {
+        OnNext(GameController.Screen.MAIN_MENU);
+
+        //Start animation open doors
+        gameController.Doors.OpenDoors();
+    }
     #endregion
 
     #region Public methods
-    public void InitSession(ScriptableDifficulty difficulty, ScriptablePlayerInfo info)
+    public void InitSession(ScriptableDifficulty difficulty, ScriptablePlayerInfo info, GameController controller)
     {
+        gameController = controller;
+
         playerInfo = info;
 
         totalExperienceForLevel = playerInfo.GetTotalExperienceForLevel(playerInfo.CurrentLevel);
@@ -527,6 +538,14 @@ public class GamePlayController : MonoBehaviour
         _questionsProgress.fillAmount = 0;
 
         GenerateQuestion();
+    }
+
+    public void BackToMainMenu()
+    {
+        Debug.Log("Back to main menu");
+
+        //Close doors to show main menu after they will be open
+        gameController.Doors.CloseDoors(LoadMainMenu);
     }
     #endregion
 }

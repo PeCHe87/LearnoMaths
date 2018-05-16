@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 95ded870545ed85419d5710f95382115
+timeCreated: 1526478600
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Digital tech Fran
+  fontNames:
+  - Digital tech Fran
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -28,7 +28,7 @@ public class MainController : MonoBehaviour
         InitScreen();
     }
 
-    public void InitScreen()
+    public void InitScreen(bool openDoors = false)
     {
         _imgButtonStart.sprite = _SpriteButtonStartOff;
 
@@ -49,8 +49,8 @@ public class MainController : MonoBehaviour
         //Deactivate difficult options
         _doorSelectedContent.SetActive(false);
 
-        if (gameController)
-            gameController.Doors.OpenDoors(true);
+        //if (gameController && !openDoors)
+        //    gameController.Doors.OpenDoors(true);
 
         //Show main doors
         _optionsDoors.SetActive(true);
