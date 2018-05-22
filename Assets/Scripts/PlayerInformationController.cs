@@ -25,10 +25,10 @@ public class PlayerInformationController : MonoBehaviour
         {
             ScriptablePlayerInfo info = gameController.PlayerInfo;
 
-            _txtExperience.text = info.CurrentExperience.ToString();
-            _txtLevel.text = info.CurrentLevel.ToString();
-            _txtName.text = info.Name;
-            _ifName.text = info.Name;
+            _txtExperience.text = info.PlayerData.CurrentExperience.ToString();
+            _txtLevel.text = info.PlayerData.CurrentLevel.ToString();
+            _txtName.text = info.PlayerData.Name;
+            _ifName.text = info.PlayerData.Name;
         }
     }
 
@@ -39,7 +39,7 @@ public class PlayerInformationController : MonoBehaviour
 
     public void Close()
     {
-        gameController.PlayerInfo.Name = _txtName.text;
+        gameController.PlayerInfo.PlayerData.Name = _txtName.text;
 
         OnNext(GameController.Screen.MAIN_MENU);
     }

@@ -41,16 +41,8 @@ public class MainController : MonoBehaviour
 
         optionSelected = -1;
 
-        //Disabled buttons
-        _btnDifficulty1.enabled = false;
-        _btnDifficulty2.enabled = false;
-        _btnDifficulty3.enabled = false;
-
         //Deactivate difficult options
         _doorSelectedContent.SetActive(false);
-
-        //if (gameController && !openDoors)
-        //    gameController.Doors.OpenDoors(true);
 
         //Show main doors
         _optionsDoors.SetActive(true);
@@ -60,8 +52,6 @@ public class MainController : MonoBehaviour
 
     public void InitGamePlay()
     {
-        //yield return new WaitForSeconds(_timeToShowGameplay);
-
         if (optionSelected == -1)
             return;
 
@@ -126,8 +116,6 @@ public class MainController : MonoBehaviour
         //Hide error label
         _txtDifficultError.SetActive(false);
 
-        //StartCoroutine(InitGamePlay());
-
         _imgButtonStart.sprite = _spriteButtonStartOn;
     }
 
@@ -148,8 +136,6 @@ public class MainController : MonoBehaviour
 
     private void ActivateOptions()
     {
-        Debug.Log("ActivateOptions");
-
         //Activate difficult options
         _doorSelectedContent.SetActive(true);
 
@@ -157,7 +143,7 @@ public class MainController : MonoBehaviour
         _optionsDoors.SetActive(false);
 
         //Start animation open doors (When animation of open finishes enable buttons of difficulty)
-        gameController.Doors.OpenDoors(false, EnableDifficultyButtons);
+        gameController.Doors.OpenDoors();
     }
 
     private void EnableDifficultyButtons()
@@ -179,8 +165,8 @@ public class MainController : MonoBehaviour
 
     public void CleanPlayerProgress()
     {
-        gameController.PlayerInfo.CurrentExperience = 0;
-        gameController.PlayerInfo.CurrentLevel = 0;
+        gameController.PlayerInfo.PlayerData.CurrentExperience = 0;
+        gameController.PlayerInfo.PlayerData.CurrentLevel = 0;
         gameController.PlayerInfo.CurrentDifficulty = -1;
     }
 }

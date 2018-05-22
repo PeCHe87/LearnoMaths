@@ -21,6 +21,8 @@ public class GameController : MonoBehaviour
     }
     public DoorsController Doors { get { return _doorsController; } }
 
+    private string pathPlayerData;
+
     private void Awake()
     {
         SplashController.OnNext += NextScreen;
@@ -34,7 +36,13 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        pathPlayerData = Path.Combine(Application.persistentDataPath, "PlayerInfo.json");
+
+        Debug.Log("Player data path: <color=green>'" + pathPlayerData + "'</color>");
+
         _currentScreen = Screen.SPLASH;
+
+        _playerInfo.LoadData(pathPlayerData);
 
         _playerInfo.CurrentDifficulty = -1;
 
@@ -96,6 +104,8 @@ public class GameController : MonoBehaviour
                 _screenPlayerInfo.GetComponent<PlayerInformationController>().UpdateInfo();
                 break;
         }
+
+        _playerInfo.SaveData(pathPlayerData);
     }
 
     private void NextScreen(Screen next)

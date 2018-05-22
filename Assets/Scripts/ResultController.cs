@@ -10,11 +10,6 @@ public class ResultController : MonoBehaviour
 
     public void SetResult(int correctQuestions, ScriptableDifficulty difficulty)
     {
-        /*if (result)
-            _textResult.text = "GANASTE!";
-        else
-            _textResult.text = "PERDISTE!";*/
-
         if (correctQuestions >= difficulty.MinCorrrectAnswersForThreeStars)
             ShowStars(3);
         else if (correctQuestions >= difficulty.MinCorrrectAnswersForTwoStars)

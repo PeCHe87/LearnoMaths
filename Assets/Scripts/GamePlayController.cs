@@ -389,22 +389,22 @@ public class GamePlayController : MonoBehaviour
 
         //Increment current experience based on question result
         currentExperience += (operationResult) ? currentDifficulty.ExperienceRewardPerCorrectQuestion : 0;
-        playerInfo.CurrentExperience = currentExperience;
+        playerInfo.PlayerData.CurrentExperience = currentExperience;
 
         //Check if level up
         if (currentExperience > totalExperienceForLevel)
         {
-            if (playerInfo.CurrentLevel < playerInfo.LevelsExperience.Length-1)
+            if (playerInfo.PlayerData.CurrentLevel < playerInfo.LevelsExperience.Length-1)
             {
-                playerInfo.CurrentLevel++;
-                playerInfo.CurrentExperience = 0;
+                playerInfo.PlayerData.CurrentLevel++;
+                playerInfo.PlayerData.CurrentExperience = 0;
 
-                _txtLevel.text = (playerInfo.CurrentLevel + 1).ToString();
+                _txtLevel.text = (playerInfo.PlayerData.CurrentLevel + 1).ToString();
                 currentExperience = 0;
 
-                totalExperienceForLevel = playerInfo.GetTotalExperienceForLevel(playerInfo.CurrentLevel);
+                totalExperienceForLevel = playerInfo.GetTotalExperienceForLevel(playerInfo.PlayerData.CurrentLevel);
 
-                Debug.Log("<b><color=yellow>LEVEL UP</color></b> Current level: " + playerInfo.CurrentLevel.ToString());
+                Debug.Log("<b><color=yellow>LEVEL UP</color></b> Current level: " + playerInfo.PlayerData.CurrentLevel.ToString());
             }
         }
 
@@ -518,7 +518,7 @@ public class GamePlayController : MonoBehaviour
 
         playerInfo = info;
 
-        totalExperienceForLevel = playerInfo.GetTotalExperienceForLevel(playerInfo.CurrentLevel);
+        totalExperienceForLevel = playerInfo.GetTotalExperienceForLevel(playerInfo.PlayerData.CurrentLevel);
 
         correctQuestions = 0;
 
@@ -528,11 +528,11 @@ public class GamePlayController : MonoBehaviour
 
         currentQuestion = 0;
 
-        currentExperience = playerInfo.CurrentExperience;
+        currentExperience = playerInfo.PlayerData.CurrentExperience;
 
         _experienceProgress.fillAmount = (float)currentExperience / (float)totalExperienceForLevel;
 
-        _txtLevel.text = (playerInfo.CurrentLevel + 1).ToString();
+        _txtLevel.text = (playerInfo.PlayerData.CurrentLevel + 1).ToString();
 
         //Question progress
         _questionsProgress.fillAmount = 0;

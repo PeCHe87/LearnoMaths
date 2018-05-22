@@ -11,8 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c6f9fa9d0fb7114694dfb90dc425d7b, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  Name: Player name
-  CurrentDifficulty: 2
-  CurrentLevel: 1
-  CurrentExperience: 60
+  PlayerData:
+    Name: Player name
+    CurrentLevel: 1
+    CurrentExperience: 45
+  CurrentDifficulty: 0
   LevelsExperience: 3200000064000000fa000000c2010000ee020000e8030000dc050000c4090000a00f000088130000
